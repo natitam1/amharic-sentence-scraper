@@ -1,4 +1,4 @@
-user_agent: "AmharicSentenceResearchBot/1.0 (+mailto:research@example.com)"
+user_agent: "AmharicSentenceResearchBot/1.3 (+https://github.com/natitam1/amharic-sentence-scraper)"
 
 output:
   jsonl_path: data/amharic_sentences.jsonl
@@ -31,6 +31,9 @@ filter:
     - "photo:"
     - "image:"
 
+balance:
+  max_sentences_per_type: null
+
 dedup:
   similarity_threshold: 0.90
   rolling_window: 5000
@@ -43,6 +46,7 @@ sources:
   bbc_amharic:
     enabled: true
     adapter: generic_news
+    content_type: news
     base_url: "https://www.bbc.com/amharic"
     discovery:
       type: rss
@@ -61,6 +65,7 @@ sources:
   voa_amharic:
     enabled: true
     adapter: generic_news
+    content_type: news
     base_url: "https://amharic.voanews.com"
     discovery:
       type: rss
@@ -77,6 +82,7 @@ sources:
   dw_amharic:
     enabled: true
     adapter: generic_news
+    content_type: news
     base_url: "https://www.dw.com/am"
     discovery:
       type: rss
@@ -93,6 +99,7 @@ sources:
   fana:
     enabled: false
     adapter: generic_news
+    content_type: news
     base_url: "https://www.fanabc.com"
     discovery:
       type: sitemap
@@ -105,6 +112,7 @@ sources:
   walta:
     enabled: false
     adapter: generic_news
+    content_type: news
     base_url: "https://waltainfo.com"
     discovery:
       type: sitemap
@@ -117,6 +125,7 @@ sources:
   ena:
     enabled: false
     adapter: generic_news
+    content_type: news
     base_url: "https://www.ena.et"
     discovery:
       type: sitemap
@@ -129,6 +138,7 @@ sources:
   addis_standard:
     enabled: false
     adapter: generic_news
+    content_type: news
     base_url: "https://addisstandard.com"
     discovery:
       type: sitemap
@@ -141,6 +151,7 @@ sources:
   sheger:
     enabled: false
     adapter: generic_news
+    content_type: news
     base_url: "https://shegerfm.com"
     discovery:
       type: sitemap
@@ -153,6 +164,7 @@ sources:
   reporter_amharic:
     enabled: false
     adapter: generic_news
+    content_type: news
     base_url: "https://www.ethiopianreporter.com"
     discovery:
       type: sitemap
@@ -161,4 +173,112 @@ sources:
     body_selectors: [".entry-content", "article"]
     remove_selectors: ["script", "style", "nav", "aside", "footer", "figure", "form"]
     delay_seconds: 3.0
+  local_podcast_transcripts:
+    enabled: false
+    adapter: local_transcript
+    content_type: podcast
+    base_path: input/podcasts
+    paths: ["**/*.txt", "**/*.jsonl", "**/*.srt", "**/*.vtt"]
+    text_field: text
+    strip_speaker_labels: true
+
+  local_interview_transcripts:
+    enabled: false
+    adapter: local_transcript
+    content_type: interview
+    base_path: input/interviews
+    paths: ["**/*.txt", "**/*.jsonl", "**/*.srt", "**/*.vtt"]
+    text_field: text
+    strip_speaker_labels: true
+
+  local_radio_transcripts:
+    enabled: false
+    adapter: local_transcript
+    content_type: radio
+    base_path: input/radio
+    paths: ["**/*.txt", "**/*.jsonl", "**/*.srt", "**/*.vtt"]
+    text_field: text
+    strip_speaker_labels: true
+
+  local_story_transcripts:
+    enabled: false
+    adapter: local_transcript
+    content_type: story
+    base_path: input/stories
+    paths: ["**/*.txt", "**/*.jsonl", "**/*.srt", "**/*.vtt"]
+    text_field: text
+    strip_speaker_labels: false
+
+  local_lecture_transcripts:
+    enabled: false
+    adapter: local_transcript
+    content_type: lecture
+    base_path: input/lectures
+    paths: ["**/*.txt", "**/*.jsonl", "**/*.srt", "**/*.vtt"]
+    text_field: text
+    strip_speaker_labels: true
+
+  local_drama_transcripts:
+    enabled: false
+    adapter: local_transcript
+    content_type: drama
+    base_path: input/drama
+    paths: ["**/*.txt", "**/*.jsonl", "**/*.srt", "**/*.vtt"]
+    text_field: text
+    strip_speaker_labels: true
+
+  local_educational_text:
+    enabled: false
+    adapter: local_transcript
+    content_type: educational
+    base_path: input/educational
+    paths: ["**/*.txt", "**/*.jsonl", "**/*.srt", "**/*.vtt"]
+    text_field: text
+    strip_speaker_labels: false
+
+  local_community_text:
+    enabled: false
+    adapter: local_transcript
+    content_type: community
+    base_path: input/community
+    paths: ["**/*.txt", "**/*.jsonl"]
+    text_field: text
+    strip_speaker_labels: false
+  ethiopian_documentary_playlist:
+    enabled: false
+    adapter: youtube_playlist
+    content_type: documentary
+    playlist_urls:
+      - "https://www.youtube.com/playlist?list=PLoP70XWFnSTjxQfGNz4P22kq39i79fAMk"
+    subtitle_languages: ["am", "am-ET"]
+    strip_speaker_labels: true
+    cookie_file: null
+    retry_failed: false
+    request_delay_seconds: 3.0
+    subtitle_retries: 3
+    subtitle_backoff_seconds: 20
+  meri_podcast_videos:
+    enabled: false
+    adapter: youtube_playlist
+    content_type: podcast
+    filter:
+      min_words: 15
+      max_words: 90
+      min_ethiopic_ratio: 0.90
+      max_latin_words: 0
+      reject_caption_artifacts: true
+      reject_repeated_words: true
+    collection_urls:
+      - "https://www.youtube.com/@Meripodcast/videos"
+    subtitle_languages: ["am-orig", "am"]
+    strip_speaker_labels: true
+    cookie_file: null
+    player_clients: ["android"]
+    retry_failed: false
+    request_delay_seconds: 4.0
+    subtitle_retries: 3
+    subtitle_backoff_seconds: 30
+
+
+
 

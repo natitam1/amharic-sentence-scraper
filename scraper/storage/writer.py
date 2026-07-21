@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -33,11 +34,26 @@ class CorpusWriter:
     def known_hashes(self) -> set[str]:
         return {row[0] for row in self.db.execute("SELECT hash FROM sentence_hashes")}
 
-    def article_seen(self, url: str) -> bool:
+    def article_seen(self, url: str, include_failed: bool = False) -> bool:
+        statuses = ("processed", "failed") if include_failed else ("processed",)
+        placeholders = ",".join("?" for _ in statuses)
         row = self.db.execute(
-            "SELECT 1 FROM articles WHERE url = ? AND status = 'processed'", (url,)
+            f"SELECT 1 FROM articles WHERE url = ? AND status IN ({placeholders})",
+            (url, *statuses),
         ).fetchone()
         return row is not None
+
+    def content_type_counts(self) -> Counter[str]:
+        counts: Counter[str] = Counter()
+        if not self.jsonl_path.exists():
+            return counts
+        with self.jsonl_path.open(encoding="utf-8") as handle:
+            for line in handle:
+                if not line.strip():
+                    continue
+                record = json.loads(line)
+                counts[record.get("content_type", "news")] += 1
+        return counts
 
     def append(self, sentence: str, sentence_hash: str, metadata: dict) -> None:
         now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -89,5 +105,3 @@ class CorpusWriter:
 
     def __exit__(self, *_):
         self.close()
-
-
