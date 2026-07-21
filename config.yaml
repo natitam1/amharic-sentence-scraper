@@ -1,0 +1,164 @@
+user_agent: "AmharicSentenceResearchBot/1.0 (+mailto:research@example.com)"
+
+output:
+  jsonl_path: data/amharic_sentences.jsonl
+  state_db_path: data/scraper_state.sqlite3
+
+http:
+  timeout_seconds: 25
+  retries: 3
+  backoff_seconds: 1.5
+  default_delay_seconds: 2.5
+  robots:
+    enabled: true
+    fail_closed: true
+    cache_seconds: 86400
+
+filter:
+  min_words: 5
+  max_words: 90
+  min_ethiopic_ratio: 0.55
+  require_terminal_punctuation: true
+  max_url_email_hashtag_ratio: 0.20
+  blocklist:
+    - "ተጨማሪ ያንብቡ"
+    - "ሙሉውን ያንብቡ"
+    - "ኮሜንቶችን ይመልከቱ"
+    - "ይመዝገቡ"
+    - "subscribe"
+    - "copyright"
+    - "all rights reserved"
+    - "photo:"
+    - "image:"
+
+dedup:
+  similarity_threshold: 0.90
+  rolling_window: 5000
+  length_bucket_size: 10
+  prefix_chars: 8
+
+# Endpoints and selectors are intentionally data-driven. Verify terms and
+# robots policy before enabling additional sources.
+sources:
+  bbc_amharic:
+    enabled: true
+    adapter: generic_news
+    base_url: "https://www.bbc.com/amharic"
+    discovery:
+      type: rss
+      urls:
+        - "https://feeds.bbci.co.uk/amharic/rss.xml"
+    article_url_patterns:
+      - "/amharic/articles/"
+      - "/amharic/news-"
+    body_selectors:
+      - "main article"
+      - "[data-component='text-block']"
+      - "article"
+    remove_selectors: ["script", "style", "nav", "aside", "footer", "figure", "form"]
+    delay_seconds: 2.5
+
+  voa_amharic:
+    enabled: true
+    adapter: generic_news
+    base_url: "https://amharic.voanews.com"
+    discovery:
+      type: rss
+      urls:
+        - "https://amharic.voanews.com/api/zrqiteuuir"
+    article_url_patterns: ["/a/"]
+    body_selectors:
+      - ".wsw"
+      - ".article-content"
+      - "article"
+    remove_selectors: ["script", "style", "nav", "aside", "footer", "figure", "form"]
+    delay_seconds: 2.5
+
+  dw_amharic:
+    enabled: true
+    adapter: generic_news
+    base_url: "https://www.dw.com/am"
+    discovery:
+      type: rss
+      urls:
+        - "https://rss.dw.com/rdf/rss-am-all"
+    article_url_patterns: ["/am/"]
+    body_selectors:
+      - "main article"
+      - ".rich-text"
+      - "article"
+    remove_selectors: ["script", "style", "nav", "aside", "footer", "figure", "form"]
+    delay_seconds: 2.5
+
+  fana:
+    enabled: false
+    adapter: generic_news
+    base_url: "https://www.fanabc.com"
+    discovery:
+      type: sitemap
+      urls: ["https://www.fanabc.com/sitemap_index.xml"]
+    article_url_patterns: ["/archives/"]
+    body_selectors: [".entry-content", "article"]
+    remove_selectors: ["script", "style", "nav", "aside", "footer", "figure", "form"]
+    delay_seconds: 3.0
+
+  walta:
+    enabled: false
+    adapter: generic_news
+    base_url: "https://waltainfo.com"
+    discovery:
+      type: sitemap
+      urls: ["https://waltainfo.com/wp-sitemap.xml"]
+    article_url_patterns: ["/"]
+    body_selectors: [".entry-content", "article"]
+    remove_selectors: ["script", "style", "nav", "aside", "footer", "figure", "form"]
+    delay_seconds: 3.0
+
+  ena:
+    enabled: false
+    adapter: generic_news
+    base_url: "https://www.ena.et"
+    discovery:
+      type: sitemap
+      urls: ["https://www.ena.et/web/amh/sitemap.xml"]
+    article_url_patterns: ["/web/amh/w/"]
+    body_selectors: [".journal-content-article", "article", "main"]
+    remove_selectors: ["script", "style", "nav", "aside", "footer", "figure", "form"]
+    delay_seconds: 3.0
+
+  addis_standard:
+    enabled: false
+    adapter: generic_news
+    base_url: "https://addisstandard.com"
+    discovery:
+      type: sitemap
+      urls: ["https://addisstandard.com/wp-sitemap.xml"]
+    article_url_patterns: ["/"]
+    body_selectors: [".entry-content", "article"]
+    remove_selectors: ["script", "style", "nav", "aside", "footer", "figure", "form"]
+    delay_seconds: 3.0
+
+  sheger:
+    enabled: false
+    adapter: generic_news
+    base_url: "https://shegerfm.com"
+    discovery:
+      type: sitemap
+      urls: ["https://shegerfm.com/wp-sitemap.xml"]
+    article_url_patterns: ["/"]
+    body_selectors: [".entry-content", "article"]
+    remove_selectors: ["script", "style", "nav", "aside", "footer", "figure", "form"]
+    delay_seconds: 3.0
+
+  reporter_amharic:
+    enabled: false
+    adapter: generic_news
+    base_url: "https://www.ethiopianreporter.com"
+    discovery:
+      type: sitemap
+      urls: ["https://www.ethiopianreporter.com/sitemap_index.xml"]
+    article_url_patterns: ["/"]
+    body_selectors: [".entry-content", "article"]
+    remove_selectors: ["script", "style", "nav", "aside", "footer", "figure", "form"]
+    delay_seconds: 3.0
+
