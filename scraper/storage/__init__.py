@@ -1,0 +1,2 @@
+"""Persistent corpus storage."""
+

@@ -1,0 +1,2 @@
+"""Amharic sentence collection pipeline."""
+
