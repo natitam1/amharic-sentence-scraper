@@ -1,12 +1,14 @@
 from scraper.adapters.generic_news import GenericNewsAdapter
 from scraper.adapters.local_transcript import LocalTranscriptAdapter
 from scraper.adapters.youtube_playlist import YouTubePlaylistAdapter
+from scraper.adapters.telegram_web import TelegramWebAdapter
 
 ADAPTERS = {
     "generic_news": GenericNewsAdapter,
     "generic_web": GenericNewsAdapter,
     "local_transcript": LocalTranscriptAdapter,
     "youtube_playlist": YouTubePlaylistAdapter,
+    "telegram_web": TelegramWebAdapter,
 }
 
 

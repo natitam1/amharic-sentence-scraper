@@ -1,4 +1,10 @@
-user_agent: "AmharicSentenceResearchBot/1.3 (+https://github.com/natitam1/amharic-sentence-scraper)"
+user_agent: "AmharicSentenceResearchBot/1.0 (+mailto:natnaeltamiru98@gmail.com)"
+
+output:
+  jsonl_path: data/amharic_sentences.jsonl
+  state_db_path: data/scraper_state.sqlite3
+
+user_agent: "AmharicSentenceResearchBot/1.0 (+mailto:natnaeltamiru98@gmail.com)"
 
 output:
   jsonl_path: data/amharic_sentences.jsonl
@@ -11,7 +17,7 @@ http:
   default_delay_seconds: 2.5
   robots:
     enabled: true
-    fail_closed: true
+    fail_closed: false
     cache_seconds: 86400
 
 filter:
@@ -279,6 +285,42 @@ sources:
     subtitle_retries: 3
     subtitle_backoff_seconds: 30
 
+  telegram_melkam_enaseb:
+    enabled: true
+    adapter: telegram_web
+    content_type: community
+    channel_name: "Melkam_Enaseb"
+    delay_seconds: 2.0
+    filter:
+      min_words: 20
+      max_words: 50
 
+  telegram_ye_fikr_gize:
+    enabled: true
+    adapter: telegram_web
+    content_type: community
+    channel_name: "ye_fikr_gize"
+    delay_seconds: 2.0
+    filter:
+      min_words: 20
+      max_words: 50
 
+  telegram_kesebaturu:
+    enabled: true
+    adapter: telegram_web
+    content_type: community
+    channel_name: "KeSebatUru"
+    delay_seconds: 2.0
+    filter:
+      min_words: 20
+      max_words: 50
 
+  telegram_ethio_pdf_books:
+    enabled: true
+    adapter: telegram_web
+    content_type: community
+    channel_name: "ETHIO_PDF_BOOKS"
+    delay_seconds: 2.0
+    filter:
+      min_words: 20
+      max_words: 50
